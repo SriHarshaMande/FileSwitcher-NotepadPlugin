@@ -1,0 +1,47 @@
+name: Build FileSwitcher Plugin
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  release:
+    types: [ created ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        configuration: [Release]
+        platform: [x64]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Build
+      run: |
+        msbuild /m /p:Configuration=${{matrix.configuration}} /p:Platform=${{matrix.platform}} FileSwitcher.sln
+
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: FileSwitcher-${{matrix.platform}}
+        path: |
+          x64/Release/FileSwitcher.dll
+          x64/Release/FileSwitcher.lib
+          x64/Release/FileSwitcher.exp
+          x64/Release/FileSwitcher.pdb
+
+    - name: Upload Release Assets
+      if: github.event_name == 'release'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          x64/Release/FileSwitcher.dll
+          x64/Release/FileSwitcher.lib
+          x64/Release/FileSwitcher.exp
+          x64/Release/FileSwitcher.pdb
