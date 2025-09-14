@@ -1,0 +1,5 @@
+#pragma once
+
+#define IDD_FILE_SWITCHER 1000
+#define IDC_FILE_LIST 1001
+#define IDC_SEARCH_EDIT 1002

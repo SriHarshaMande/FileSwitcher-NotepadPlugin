@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+/.vs
+/FileSwitcher/Release
+/FileSwitcher/x64
+/x64
+/Release
